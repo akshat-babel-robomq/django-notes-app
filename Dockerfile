@@ -8,24 +8,19 @@ RUN apt-get update \
     && apt-get install -y gcc default-libmysqlclient-dev pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-
-# Install app dependencies
+# Install dependencies
 RUN pip install mysqlclient
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy the app source code
 COPY . /app/backend
 
+# Make sure entrypoint.sh is executable
+RUN chmod +x /app/backend/entrypoint.sh
+
+# Set entrypoint to your script
+ENTRYPOINT ["/app/backend/entrypoint.sh"]
+
+# Expose Django's default port
 EXPOSE 8000
 
-# Add this line to start the Django server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
-COPY entrypoint.sh /app/backend/
-CMD ["./entrypoint.sh"]
-
-COPY entrypoint.sh /app/backend/entrypoint.sh
-RUN chmod +x /app/backend/entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
-
-#RUN python manage.py migrate
-#RUN python manage.py makemigrations
