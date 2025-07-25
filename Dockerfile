@@ -23,5 +23,9 @@ CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 COPY entrypoint.sh /app/backend/
 CMD ["./entrypoint.sh"]
 
+COPY entrypoint.sh /app/backend/entrypoint.sh
+RUN chmod +x /app/backend/entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
+
 #RUN python manage.py migrate
 #RUN python manage.py makemigrations
